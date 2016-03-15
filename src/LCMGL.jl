@@ -1,3 +1,5 @@
+__precompile__()
+
 module LCMGL
 
 import Base: unsafe_convert
@@ -112,6 +114,9 @@ sphere(gl::LCMGLClient, origin, radius, slices, stacks) = ccall((:bot_lcmgl_sphe
 
 draw_axes(gl::LCMGLClient) = ccall((:bot_lcmgl_draw_axes, "libbot2-lcmgl-client"), Void, (Ptr{Void},), gl)
 
+function __init__()
+	@linux? Libdl.dlopen("liblcm", Libdl.RTLD_GLOBAL) : nothing
+end
 
 
 end
