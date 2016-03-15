@@ -2,12 +2,25 @@
 language: julia
 os:
   - linux
-  - osx
 julia:
   - release
   - nightly
 notifications:
   email: false
+
+before_install:
+  - mkdir build
+  - git clone https://github.com/RobotLocomotion/lcm-pod.git
+  - git clone https://github.com/RobotLocomotion/libbot.git
+  - cd lcm-pod
+  - sudo ./install_prereqs.sh ubuntu
+  - make
+  - cd ../libbot
+  - sudo ./install_prereqs.sh ubuntu
+  - make
+  - cd ..
+  - source build/config/pods_setup_all.sh
+
 # uncomment the following lines to override the default test script
 #script:
 #  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
