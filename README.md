@@ -30,4 +30,6 @@ LCMGLClient("test") do lcmgl
 end
 ```
 
+## Function Names
 
+This package attempts to provide a consistent naming scheme for exported lcmgl functions: the `bot2_lcmgl_` prefix is always removed, and suffixes that exist only to indicate the number or type of arguments have also been removed. So, for example, `bot_lcmgl_vertex2d` has become `vertex(lcmgl, x, y)` and `bot_lcmgl_vertex3d` has become `vertex(lcmgl, x, y, z)`. The only exceptions are `begin` and `end`, which are reserved keywords in Julia: they have become `begin_mode(lcmgl, mode)` and `end_mode(lcmgl)`. 
