@@ -3,16 +3,21 @@ module LCMGL
 import Base: unsafe_convert
 export LCM, LCMGLClient,
 	switch_buffer,
+	begin_mode,
+	end_mode,
 	vertex,
 	color,
-	gl_begin,
-	gl_end,
-	sphere,
+	normal,
+	scale,
+	point_size,
+	line_width,
 	translated,
 	rotated,
 	push_matrix,
 	pop_matrix,
-	load_identity
+	load_identity,
+	sphere,
+	draw_axes
 
 POINTS         = 0x0000
 LINES          = 0x0001
@@ -75,27 +80,37 @@ LCMGLClient(func::Function, lcm::LCM, name::AbstractString) = begin
     end
 end
 
-sphere(gl::LCMGLClient, origin, radius, slices, stacks) = ccall((:bot_lcmgl_sphere, "libbot2-lcmgl-client"), 
-    Void, (Ptr{Void}, Ptr{Cdouble}, Cdouble, Cint, Cint), gl, origin, radius, slices, stacks)
-
 switch_buffer(gl::LCMGLClient) = ccall((:bot_lcmgl_switch_buffer, "libbot2-lcmgl-client"), Void, (Ptr{Void},), gl)
+
+# begin and end are reserved keywords in Julia, so I've renamed
+# them to begin_mode and end_mode
+begin_mode(gl::LCMGLClient, mode::Integer) = ccall((:bot_lcmgl_begin, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cuint), gl, mode)
+end_mode(gl::LCMGLClient) = ccall((:bot_lcmgl_end, "libbot2-lcmgl-client"), Void, (Ptr{Void},), gl)
+
+vertex(gl::LCMGLClient, x, y) = ccall((:bot_lcmgl_vertex2d, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cdouble, Cdouble), gl, x, y)
+vertex(gl::LCMGLClient, x, y, z) = ccall((:bot_lcmgl_vertex3d, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble), gl, x, y, z)
 
 color(gl::LCMGLClient, red, green, blue) = ccall((:bot_lcmgl_color3f, "libbot2-lcmgl-client"), 
     Void, (Ptr{Void}, Cfloat, Cfloat, Cfloat), gl.pointer, red, green, blue)
 color(gl::LCMGLClient, red, green, blue, alpha) = ccall((:bot_lcmgl_color4f, "libbot2-lcmgl-client"), 
     Void, (Ptr{Void}, Cfloat, Cfloat, Cfloat, Cfloat), gl.pointer, red, green, blue, alpha)
+normal(gl::LCMGLClient, x, y, z) = ccall((:bot_lcmgl_normal3f, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cfloat, Cfloat, Cfloat), gl, x, y, z)
+scale(gl::LCMGLClient, x, y, z) = ccall((:bot_lcmgl_scalef, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cfloat, Cfloat, Cfloat), gl, x, y, z)
 
-vertex(gl::LCMGLClient, x, y) = ccall((:bot_lcmgl_vertex2d, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cdouble, Cdouble), gl, x, y)
-vertex(gl::LCMGLClient, x, y, z) = ccall((:bot_lcmgl_vertex3d, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble), gl, x, y, z)
+point_size(gl::LCMGLClient, size) = ccall((:bot_lcmgl_point_size, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cfloat), gl, size)
+line_width(gl::LCMGLClient, width) = ccall((:bot_lcmgl_line_width, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cfloat), gl, line_width)
 
-gl_begin(gl::LCMGLClient, mode::Integer) = ccall((:bot_lcmgl_begin, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cuint), gl, mode)
-gl_end(gl::LCMGLClient) = ccall((:bot_lcmgl_end, "libbot2-lcmgl-client"), Void, (Ptr{Void},), gl)
 
 translated(gl::LCMGLClient, v0, v1, v2) = ccall((:bot_lcmgl_translated, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble), gl, v0, v1, v2)
 rotated(gl::LCMGLClient, angle, x, y, z) = ccall((:bot_lcmgl_rotated, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble, Cdouble), gl, gl, angle, x, y, z)
 push_matrix(gl::LCMGLClient) = ccall((:bot_lcmgl_push_matrix, "libbot2-lcmgl-client"), Void, (Ptr{Void},))
 pop_matrix(gl::LCMGLClient) = ccall((:bot_lcmgl_pop_matrix, "libbot2-lcmgl-client"), Void, (Ptr{Void},))
 load_identity(gl::LCMGLClient) = ccall((:bot_lcmgl_load_identity, "libbot2-lcmgl-client"), Void, (Ptr{Void},))
+
+sphere(gl::LCMGLClient, origin, radius, slices, stacks) = ccall((:bot_lcmgl_sphere, "libbot2-lcmgl-client"), 
+    Void, (Ptr{Void}, Ptr{Cdouble}, Cdouble, Cint, Cint), gl, origin, radius, slices, stacks)
+
+draw_axes(gl::LCMGLClient) = ccall((:bot_lcmgl_draw_axes, "libbot2-lcmgl-client"), Void, (Ptr{Void},), gl)
 
 
 
