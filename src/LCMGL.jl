@@ -2,13 +2,17 @@ module LCMGL
 
 import Base: unsafe_convert
 export LCM, LCMGLClient,
-	GLConstant,
 	switch_buffer,
 	vertex,
 	color,
 	gl_begin,
 	gl_end,
-	sphere
+	sphere,
+	translated,
+	rotated,
+	push_matrix,
+	pop_matrix,
+	load_identity
 
 POINTS         = 0x0000
 LINES          = 0x0001
@@ -86,6 +90,14 @@ vertex(gl::LCMGLClient, x, y, z) = ccall((:bot_lcmgl_vertex3d, "libbot2-lcmgl-cl
 
 gl_begin(gl::LCMGLClient, mode::Integer) = ccall((:bot_lcmgl_begin, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cuint), gl, mode)
 gl_end(gl::LCMGLClient) = ccall((:bot_lcmgl_end, "libbot2-lcmgl-client"), Void, (Ptr{Void},), gl)
+
+translated(gl::LCMGLClient, v0, v1, v2) = ccall((:bot_lcmgl_translated, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble), gl, v0, v1, v2)
+rotated(gl::LCMGLClient, angle, x, y, z) = ccall((:bot_lcmgl_rotated, "libbot2-lcmgl-client"), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble, Cdouble), gl, gl, angle, x, y, z)
+push_matrix(gl::LCMGLClient) = ccall((:bot_lcmgl_push_matrix, "libbot2-lcmgl-client"), Void, (Ptr{Void},))
+pop_matrix(gl::LCMGLClient) = ccall((:bot_lcmgl_pop_matrix, "libbot2-lcmgl-client"), Void, (Ptr{Void},))
+load_identity(gl::LCMGLClient) = ccall((:bot_lcmgl_load_identity, "libbot2-lcmgl-client"), Void, (Ptr{Void},))
+
+
 
 end
     
