@@ -19,7 +19,7 @@ before_install:
   - sudo ./install_prereqs.sh ubuntu
   - make
   - cd ..
-  - source build/config/pods_setup_all.sh
+  - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:`pwd`/build/lib"
 
 # uncomment the following lines to override the default test script
 #script:
