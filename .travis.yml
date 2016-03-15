@@ -2,24 +2,27 @@
 language: julia
 os:
   - linux
+  - osx
 julia:
   - release
   - nightly
 notifications:
   email: false
+branches:
+  only: master
 
 before_install:
   - mkdir build
   - git clone https://github.com/RobotLocomotion/lcm-pod.git
   - git clone https://github.com/RobotLocomotion/libbot.git
   - cd lcm-pod
-  - sudo ./install_prereqs.sh ubuntu
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./install_prereqs.sh homebrew ; else sudo ./install_prereqs.sh ubuntu ; fi
   - make
   - cd ../libbot
-  - sudo ./install_prereqs.sh ubuntu
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./install_prereqs.sh homebrew ; else sudo ./install_prereqs.sh ubuntu ; fi
   - make
   - cd ..
-  - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:`pwd`/build/lib"
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:`pwd`/build/lib" ; else export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:`pwd`/build/lib" ; fi
 
 # uncomment the following lines to override the default test script
 #script:
