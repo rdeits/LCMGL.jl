@@ -58,9 +58,9 @@ type LCMGLClient
     pointer::Ptr{Void}
 
     LCMGLClient(lcm::LCM, name::AbstractString) = begin
-        gl = new(lcm,
-						name,
-            ccall((:bot_lcmgl_init, "libbot2-lcmgl-client"), Ptr{Void}, (Ptr{Void}, Ptr{UInt8}), lcm, name))
+        gl = new(lcm, name,
+                 ccall((:bot_lcmgl_init, "libbot2-lcmgl-client"),
+				       Ptr{Void}, (Ptr{Void}, Ptr{UInt8}), lcm, name))
         finalizer(gl, close)
         gl
     end
@@ -69,7 +69,8 @@ unsafe_convert(::Type{Ptr{Void}}, gl::LCMGLClient) = gl.pointer
 
 function close(lcmgl::LCMGLClient)
 	if lcmgl.pointer != C_NULL
-		ccall((:bot_lcmgl_destroy, "libbot2-lcmgl-client"), Void, (Ptr{Void},), lcmgl)
+		ccall((:bot_lcmgl_destroy, "libbot2-lcmgl-client"),
+		      Void, (Ptr{Void},), lcmgl)
 		lcmgl.pointer = C_NULL
 	end
 end
