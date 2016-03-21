@@ -38,13 +38,19 @@ type LCM
 
     LCM() = begin
         lc = new(ccall((:lcm_create, "liblcm"), Ptr{Void}, (Ptr{UInt8},), ""))
-        finalizer(lc, x -> begin
-            ccall((:lcm_destroy, "liblcm"), Void, (Ptr{Void},), x)
-            end)
+		finalizer(lc, close)
         lc
     end
 end
 unsafe_convert(::Type{Ptr{Void}}, lc::LCM) = lc.pointer
+
+function close(lcm::LCM)
+	if lcm.pointer != C_NULL
+	    ccall((:lcm_destroy, "liblcm"), Void, (Ptr{Void},), lcm)
+		lcm.pointer = C_NULL
+	end
+end
+
 
 type LCMGLClient
     lcm::LCM
@@ -55,13 +61,18 @@ type LCMGLClient
         gl = new(lcm,
 						name,
             ccall((:bot_lcmgl_init, "libbot2-lcmgl-client"), Ptr{Void}, (Ptr{Void}, Ptr{UInt8}), lcm, name))
-        finalizer(gl, x -> begin
-            ccall((:bot_lcmgl_destroy, "libbot2-lcmgl-client"), Void, (Ptr{Void},), x)
-            end)
+        finalizer(gl, close)
         gl
     end
 end
 unsafe_convert(::Type{Ptr{Void}}, gl::LCMGLClient) = gl.pointer
+
+function close(lcmgl::LCMGLClient)
+	if lcmgl.pointer != C_NULL
+		ccall((:bot_lcmgl_destroy, "libbot2-lcmgl-client"), Void, (Ptr{Void},), lcmgl)
+		lcmgl.pointer = C_NULL
+	end
+end
 
 LCMGLClient(name::AbstractString) = LCMGLClient(LCM(), name)
 
@@ -70,8 +81,8 @@ LCMGLClient(func::Function, name::AbstractString) = begin
     try
         func(gl)
     finally
-        finalize(gl.lcm)
-        finalize(gl)
+		close(gl.lcm)
+		close(gl)
     end
 end
 
@@ -80,7 +91,7 @@ LCMGLClient(func::Function, lcm::LCM, name::AbstractString) = begin
     try
         func(gl)
     finally
-        finalize(gl)
+		close(gl)
     end
 end
 
