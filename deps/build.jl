@@ -17,7 +17,7 @@ deps = [
     provides(Homebrew.HB, "glib", gobject, os=:Darwin)
 end
 
-provides(AptGet, Dict("libglib2.0-dev" => gobject
+provides(AptGet, Dict("libglib2.0-dev" => gobject,
                       "openjdk-6-jdk" => java6
                       ))
 
