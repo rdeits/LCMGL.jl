@@ -33,10 +33,10 @@ provides(BuildProcess,
 
 prefix = joinpath(BinDeps.depsdir(lcmgl_client), "..")
 lcmgl_args = ["BUILD_PREFIX=$(prefix)"]
-@osx_only
+@osx_only begin
     include_path = joinpath(Homebrew.prefix(), "include")
     library_path = joinpath(Homebrew.prefix(), "lib")
-    lcmgl_args = vcat(lcmgl_args, ["INCLUDE_PATH=$INCLUDE_PATH:$(include_path)", "LIBRARY_PATH=$LIBRARY_PATH:$(library_path)"])
+    lcmgl_args = vcat(lcmgl_args, ["INCLUDE_PATH=\$INCLUDE_PATH:$(include_path)", "LIBRARY_PATH=\$LIBRARY_PATH:$(library_path)"])
 end
 
 
