@@ -39,7 +39,7 @@ provides(SimpleBuild,
         GetSources(lcm)
         @build_steps begin
             ChangeDirectory(joinpath(BinDeps.depsdir(lcm), "src", "lcm-1.3.0"))
-            `./configure --prefix=$(prefix)`
+            `./configure --prefix=$(prefix) --with-java=no` # disable java due to https://github.com/lcm-proj/lcm/issues/56
             MakeTargets(".", [])
             MakeTargets(".", ["install"])
         end
