@@ -21,10 +21,14 @@ provides(AptGet, Dict("libglib2.0-dev" => gobject,
                       "openjdk-6-jdk" => java6
                       ))
 
-provides(Sources, Dict(
-    URI("https://github.com/RobotLocomotion/libbot/archive/cc8d228b50847c4c55e6963b8ee95c237287547f.zip") => lcmgl_client,
-    URI("https://github.com/RobotLocomotion/lcm-pod/archive/8dba206f3403f01048b73ce10b6a17da58280fbe.zip") => lcm
-    ))
+provides(Sources,
+    URI("https://github.com/RobotLocomotion/libbot/archive/cc8d228b50847c4c55e6963b8ee95c237287547f.zip"),
+    lcmgl_client,
+    unpacked_dir="libbot-cc8d228b50847c4c55e6963b8ee95c237287547f")
+provides(Sources,
+    URI("https://github.com/RobotLocomotion/lcm-pod/archive/8dba206f3403f01048b73ce10b6a17da58280fbe.zip"),
+    lcm,
+    unpacked_dir="lcm-pod-8dba206f3403f01048b73ce10b6a17da58280fbe")
 
 prefix = joinpath(BinDeps.depsdir(lcmgl_client), "..")
 pods_args = ["BUILD_PREFIX=$(prefix)"]
