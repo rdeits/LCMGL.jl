@@ -3,7 +3,7 @@ using BinDeps
 @BinDeps.setup
 
 deps = [
-    java6 = library_dependency("openjdk-6-jdk", os=:Linux)
+    java6 = library_dependency("openjdk-6-jdk", aliases=["jvm/java-6-openjdk-amd64/lib/amd64/jli/libjli"], os=:Linux)
     gobject = library_dependency("gobject", aliases = ["libgobject-2.0-0", "libgobject-2.0", "libgobject-2_0-0", "libgobject-2.0.so.0"])
     lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[gobject])
     lcmgl_client = library_dependency("bot2-lcmgl-client", aliases=["libbot2-lcmgl-client"], depends=[lcm])
