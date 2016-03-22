@@ -32,12 +32,19 @@ provides(BuildProcess,
     ))
 
 prefix = joinpath(BinDeps.depsdir(lcmgl_client), "..")
+lcmgl_args = ["BUILD_PREFIX=$(prefix)"]
+@osx_only
+    include_path = joinpath(Homebrew.prefix(), "include")
+    library_path = joinpath(Homebrew.prefix(), "lib")
+    lcmgl_args = vcat(lcmgl_args, ["INCLUDE_PATH=$INCLUDE_PATH:$(include_path)", "LIBRARY_PATH=$LIBRARY_PATH:$(library_path)"])
+end
+
 
 provides(SimpleBuild,
     (@build_steps begin
         GetSources(lcmgl_client)
         @build_steps begin
-            MakeTargets(joinpath(BinDeps.depsdir(lcmgl_client)), ["BUILD_PREFIX=$(prefix)"])
+            MakeTargets(joinpath(BinDeps.depsdir(lcmgl_client)), lcmgl_args)
         end
     end), lcmgl_client)
 
