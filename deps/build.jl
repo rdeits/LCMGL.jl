@@ -3,9 +3,9 @@ using BinDeps
 @BinDeps.setup
 
 deps = [
-    java6 = library_dependency("java-6-openjdk", os=:Linux)
+    # java6 = library_dependency("java-6-openjdk", os=:Linux)
     gobject = library_dependency("gobject", aliases = ["libgobject-2.0-0", "libgobject-2.0", "libgobject-2_0-0", "libgobject-2.0.so.0"])
-    lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[gobject, java6])
+    lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[gobject])
     lcmgl_client = library_dependency("bot2-lcmgl-client", aliases=["libbot2-lcmgl-client"], depends=[lcm])
 ]
 
@@ -17,8 +17,9 @@ deps = [
     provides(Homebrew.HB, "glib", gobject, os=:Darwin)
 end
 
-provides(AptGet, Dict("libglib2.0-dev" => gobject,
-                      "openjdk-6-jdk" => java6))
+provides(AptGet, Dict("libglib2.0-dev" => gobject
+                    #   "openjdk-6-jdk" => java6
+                      ))
 
 provides(Sources, Dict(
     URI("https://github.com/RobotLocomotion/libbot/archive/cc8d228b50847c4c55e6963b8ee95c237287547f.zip") => lcmgl_client,
