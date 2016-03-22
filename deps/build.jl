@@ -29,9 +29,8 @@ provides(Sources, Dict(
 prefix = joinpath(BinDeps.depsdir(lcmgl_client), "..")
 pods_args = ["BUILD_PREFIX=$(prefix)"]
 @osx_only begin
-    include_path = joinpath(Homebrew.prefix(), "include")
-    library_path = joinpath(Homebrew.prefix(), "lib")
-    pods_args = vcat(pods_args, ["INCLUDE_PATH=\$INCLUDE_PATH:$(include_path)", "LIBRARY_PATH=\$LIBRARY_PATH:$(library_path)"])
+    pkg_config_path = joinpath(Homebrew.prefix(), "lib", "pkgconfig")
+    pods_args = vcat(pods_args, ["PKG_CONFIG_PATH=\$PKG_CONFIG_PATH:$(pkg_config_path)"])
 end
 
 provides(SimpleBuild,
