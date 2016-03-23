@@ -3,7 +3,6 @@ using BinDeps
 @BinDeps.setup
 
 deps = [
-    java6 = library_dependency("openjdk-6-jdk", aliases=["jvm/java-6-openjdk-amd64/lib/amd64/jli/libjli"], os=:Linux)
     gobject = library_dependency("gobject", aliases = ["libgobject-2.0-0", "libgobject-2.0", "libgobject-2_0-0", "libgobject-2.0.so.0"])
     lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[gobject])
     lcmgl_client = library_dependency("bot2-lcmgl-client", aliases=["libbot2-lcmgl-client", "libbot2-lcmgl-client.1"], depends=[lcm])
@@ -21,9 +20,7 @@ prefix = joinpath(BinDeps.depsdir(lcmgl_client), "usr")
     ENV["INCLUDE_PATH"] = get(ENV, "INCLUDE_PATH", "") * joinpath(Homebrew.prefix(), "include")
 end
 
-provides(AptGet, Dict("libglib2.0-dev" => gobject,
-                      "openjdk-6-jdk" => java6
-                      ))
+provides(AptGet, Dict("libglib2.0-dev" => gobject))
 
 libbot_dirname = "libbot-cc8d228b50847c4c55e6963b8ee95c237287547f"
 provides(Sources,
