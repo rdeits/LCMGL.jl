@@ -9,8 +9,8 @@ deps = [
 ]
 
 prefix = joinpath(BinDeps.depsdir(lcmgl_client), "usr")
-pkg_config_dirs = AbstractString[]
-include_dirs = AbstractString[]
+pkg_config_dirs = split(ENV["PKG_CONFIG_PATH", ':')
+include_dirs = split(ENV["INCLUDE_PATH", ':')
 @osx_only begin
     if Pkg.installed("Homebrew") === nothing
         error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
