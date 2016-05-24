@@ -8,17 +8,14 @@ deps = [
     lcmgl_client = library_dependency("bot2-lcmgl-client", aliases=["libbot2-lcmgl-client", "libbot2-lcmgl-client.1"], depends=[lcm])
 ]
 
-prefix = joinpath(BinDeps.depsdir(lcmgl_client), "usr")
-pkg_config_dirs = AbstractString[]
-include_dirs = AbstractString[]
 @osx_only begin
     if Pkg.installed("Homebrew") === nothing
         error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
     end
     using Homebrew
     provides(Homebrew.HB, "glib", glib, os=:Darwin)
-    push!(pkg_config_dirs, joinpath(Homebrew.prefix(), "lib", "pkgconfig"))
-    push!(include_dirs, joinpath(Homebrew.prefix(), "include"))
+    ENV["PKG_CONFIG_PATH"] = get(ENV, "PKG_CONFIG_PATH", "") * ":" * joinpath(Homebrew.prefix(), "lib", "pkgconfig")
+    ENV["INCLUDE_PATH"] = get(ENV, "INCLUDE_PATH", "") * ":" * joinpath(Homebrew.prefix(), "include")
 end
 
 provides(AptGet, Dict("libglib2.0-dev" => glib))
@@ -34,8 +31,7 @@ provides(Sources,
     URI("https://github.com/lcm-proj/lcm/releases/download/v1.3.1/lcm-1.3.1.zip"),
     lcm)
 
-# provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la", include_dirs=include_dirs, pkg_config_dirs=pkg_config_dirs) => lcm))
-#
+prefix = joinpath(BinDeps.depsdir(lcmgl_client), "usr")
 provides(SimpleBuild,
     (@build_steps begin
         GetSources(lcm)
@@ -47,15 +43,11 @@ provides(SimpleBuild,
         end
     end), lcm)
 
-pkg_config_path = join(pkg_config_dirs, ":")
-include_path = join(include_dirs, ":")
-env = Dict{ASCIIString, ASCIIString}("PKG_CONFIG_PATH"=>pkg_config_path, "INCLUDE_PATH"=>include_path)
-
 provides(SimpleBuild,
     (@build_steps begin
         GetSources(lcmgl_client)
         @build_steps begin
-            MakeTargets(joinpath(BinDeps.depsdir(lcmgl_client), "src", libbot_dirname), ["BUILD_PREFIX=$(prefix)"], env=env)
+            MakeTargets(joinpath(BinDeps.depsdir(lcmgl_client), "src", libbot_dirname), ["BUILD_PREFIX=$(prefix)"])
             @osx_only begin
                 `install_name_tool -change $(joinpath(prefix, "lib", "liblcm.1.dylib")) "@loader_path/liblcm.1.dylib" $(joinpath(prefix, "lib", "libbot2-lcmgl-client.1.dylib"))`
             end
