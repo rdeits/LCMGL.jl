@@ -32,8 +32,8 @@ end
 
 ## Memory Management
 
-When an `LCM` or `LCMGLClient` object is finalized by the Julia garbage collector, the appropriate C function will also be called to destroy the underlying C object. If you want to explicitly free that C object early, you can call `close(lcm)` or `close(lcmgl)` yourself. You may find this useful if you get errors about too many file objects being used by LCM. Calling `close()` multiple times on the same Julia object is safe. 
+When an `LCM` or `LCMGLClient` object is finalized by the Julia garbage collector, the appropriate C function will also be called to destroy the underlying C object. If you want to explicitly free that C object early, you can call `close(lcm)` or `close(lcmgl)` yourself. You may find this useful if you get errors about too many file objects being used by LCM. Calling `close()` multiple times on the same Julia object is safe.
 
 ## Function Names
 
-This package attempts to provide a consistent naming scheme for exported lcmgl functions: the `bot2_lcmgl_` prefix is always removed, and suffixes that exist only to indicate the number or type of arguments have also been removed. So, for example, `bot_lcmgl_vertex2d` has become `vertex(lcmgl, x, y)` and `bot_lcmgl_vertex3d` has become `vertex(lcmgl, x, y, z)`. The only exceptions are `begin` and `end`, which are reserved keywords in Julia: they have become `begin_mode(lcmgl, mode)` and `end_mode(lcmgl)`.
+This package attempts to provide a consistent naming scheme for exported lcmgl functions: the `bot2_lcmgl_` prefix is always removed, and suffixes that exist only to indicate the number or type of arguments have also been removed. So, for example, `bot_lcmgl_vertex2d` has become `vertex(lcmgl, x, y)` and `bot_lcmgl_vertex3d` has become `vertex(lcmgl, x, y, z)`. There are a few exceptions: `begin` and `end` are reserved keywords in Julia, so they have become `begin_mode(lcmgl, mode)` and `end_mode(lcmgl)`, and `scale` is already defined in `Base`, so it has become `scale_axes(lcmgl, x_scale, y_scale, z_scale)`. 
