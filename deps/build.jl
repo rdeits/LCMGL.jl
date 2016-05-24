@@ -9,8 +9,8 @@ deps = [
 ]
 
 prefix = joinpath(BinDeps.depsdir(lcmgl_client), "usr")
-pkg_config_dirs = split(ENV["PKG_CONFIG_PATH", ':')
-include_dirs = split(ENV["INCLUDE_PATH", ':')
+pkg_config_dirs = split(get(ENV, "PKG_CONFIG_PATH", ""), ':')
+include_dirs = split(get(ENV, "INCLUDE_PATH", ""), ':')
 @osx_only begin
     if Pkg.installed("Homebrew") === nothing
         error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
@@ -47,7 +47,7 @@ provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la", include_dirs=in
 #         end
 #     end), lcm)
 
-classpath = ENV["CLASSPATH"] * ":" * joinpath(prefix, "share", "java")
+classpath = get(ENV, "CLASSPATH", "") * ":" * joinpath(prefix, "share", "java")
 
 provides(SimpleBuild,
     (@build_steps begin
