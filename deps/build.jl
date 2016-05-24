@@ -47,10 +47,10 @@ provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la", include_dirs=in
 #         end
 #     end), lcm)
 
-classpath = get(ENV, "CLASSPATH", "") * ":" * joinpath(prefix, "share", "java", "lcm.jar")
+# classpath = get(ENV, "CLASSPATH", "") * ":" * joinpath(prefix, "share", "java", "lcm.jar")
 pkg_config_path = join(pkg_config_dirs, ":")
 include_path = join(include_dirs, ":")
-env = Dict{ASCIIString, ASCIIString}("PKG_CONFIG_PATH"=>pkg_config_path, "INCLUDE_PATH"=>include_path, "CLASSPATH"=>classpath)
+env = Dict{ASCIIString, ASCIIString}("PKG_CONFIG_PATH"=>pkg_config_path, "INCLUDE_PATH"=>include_path)
 
 provides(SimpleBuild,
     (@build_steps begin

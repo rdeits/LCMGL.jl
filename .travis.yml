@@ -12,6 +12,10 @@ notifications:
 branches:
   only: master
 
+before_install:
+  - export JAVA_HOME="/usr/lib/jvm/java-7-oracle"
+  - export PATH="$JAVA_HOME/bin:$PATH"
+  
 after_success:
   - julia -e 'cd(Pkg.dir("LCMGL")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
 
