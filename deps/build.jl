@@ -40,7 +40,7 @@ provides(SimpleBuild,
     (@build_steps begin
         GetSources(lcm)
         @build_steps begin
-            ChangeDirectory(joinpath(BinDeps.depsdir(lcm), "src", "lcm-1.3.0"))
+            ChangeDirectory(joinpath(BinDeps.depsdir(lcm), "src", "lcm-1.3.1"))
             `./configure --prefix=$(prefix) --with-java=no --with-python=no --with-lua=no`
             MakeTargets(".", [])
             MakeTargets(".", ["install"])
