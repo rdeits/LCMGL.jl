@@ -31,7 +31,7 @@ provides(Sources,
     lcmgl_client,
     unpacked_dir=libbot_dirname)
 provides(Sources,
-    URI("https://github.com/lcm-proj/lcm/releases/download/v1.3.0/lcm-1.3.0.zip"),
+    URI("https://github.com/lcm-proj/lcm/releases/download/v1.3.1/lcm-1.3.1.zip"),
     lcm)
 
 provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la", include_dirs=include_dirs, pkg_config_dirs=pkg_config_dirs) => lcm))
