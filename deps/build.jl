@@ -9,8 +9,8 @@ deps = [
 ]
 
 prefix = joinpath(BinDeps.depsdir(lcmgl_client), "usr")
-pkg_config_dirs = split(get(ENV, "PKG_CONFIG_PATH", ""), ':')
-include_dirs = split(get(ENV, "INCLUDE_PATH", ""), ':')
+pkg_config_dirs = AbstractString[]
+include_dirs = AbstractString[]
 @osx_only begin
     if Pkg.installed("Homebrew") === nothing
         error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
@@ -48,12 +48,15 @@ provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la", include_dirs=in
 #     end), lcm)
 
 classpath = get(ENV, "CLASSPATH", "") * ":" * joinpath(prefix, "share", "java")
+pkg_config_path = join(pkg_config_dirs, ":")
+include_path = join(include_dirs, ":")
+env = Dict{ASCIIString, ASCIIString}("PKG_CONFIG_PATH"=>pkg_config_path, "INCLUDE_PATH"=>include_path, "CLASSPATH"=>classpath)
 
 provides(SimpleBuild,
     (@build_steps begin
         GetSources(lcmgl_client)
         @build_steps begin
-            MakeTargets(joinpath(BinDeps.depsdir(lcmgl_client), "src", libbot_dirname), ["BUILD_PREFIX=$(prefix)"], env=Dict("PKG_CONFIG_PATH"=>join(pkg_config_dirs, ":"), "INCLUDE_PATH"=>join(include_dirs, ":"), "CLASSPATH"=>classpath))
+            MakeTargets(joinpath(BinDeps.depsdir(lcmgl_client), "src", libbot_dirname), ["BUILD_PREFIX=$(prefix)"], env=env)
             @osx_only begin
                 `install_name_tool -change $(joinpath(prefix, "lib", "liblcm.1.dylib")) "@loader_path/liblcm.1.dylib" $(joinpath(prefix, "lib", "libbot2-lcmgl-client.1.dylib"))`
             end
