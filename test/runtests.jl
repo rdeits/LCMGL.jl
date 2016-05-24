@@ -30,8 +30,11 @@ let
         scale_axes(lcmgl, 0.5, 2.0, 4.0)
         draw_axes(lcmgl)
         begin_mode(lcmgl, LCMGL.TRIANGLES)
+        normal(lcmgl, 0, 0, 1)
         vertex(lcmgl, 0, 0)
+        normal(lcmgl, 0, 0, 1)
         vertex(lcmgl, 0, 1)
+        normal(lcmgl, 0, 0, 1)
         vertex(lcmgl, 1, 0)
         end_mode(lcmgl)
 
@@ -45,7 +48,7 @@ let
         vertex(lcmgl, 0, 0, 0)
         vertex(lcmgl, 1, 1, 1)
         end_mode(lcmgl)
-        
+
         pop_matrix(lcmgl)
         switch_buffer(lcmgl)
     end
