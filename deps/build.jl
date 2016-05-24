@@ -47,11 +47,13 @@ provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la", include_dirs=in
 #         end
 #     end), lcm)
 
+classpath = ENV["CLASSPATH"] * ":" * joinpath(prefix, "share", "java")
+
 provides(SimpleBuild,
     (@build_steps begin
         GetSources(lcmgl_client)
         @build_steps begin
-            MakeTargets(joinpath(BinDeps.depsdir(lcmgl_client), "src", libbot_dirname), ["BUILD_PREFIX=$(prefix)"], env=Dict("PKG_CONFIG_PATH"=>join(pkg_config_dirs, ":"), "INCLUDE_PATH"=>join(include_dirs, ":")))
+            MakeTargets(joinpath(BinDeps.depsdir(lcmgl_client), "src", libbot_dirname), ["BUILD_PREFIX=$(prefix)"], env=Dict("PKG_CONFIG_PATH"=>join(pkg_config_dirs, ":"), "INCLUDE_PATH"=>join(include_dirs, ":"), "CLASSPATH"=>classpath))
             @osx_only begin
                 `install_name_tool -change $(joinpath(prefix, "lib", "liblcm.1.dylib")) "@loader_path/liblcm.1.dylib" $(joinpath(prefix, "lib", "libbot2-lcmgl-client.1.dylib"))`
             end
