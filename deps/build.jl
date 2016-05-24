@@ -34,20 +34,19 @@ provides(Sources,
     URI("https://github.com/lcm-proj/lcm/releases/download/v1.3.1/lcm-1.3.1.zip"),
     lcm)
 
-provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la", include_dirs=include_dirs, pkg_config_dirs=pkg_config_dirs) => lcm))
+# provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la", include_dirs=include_dirs, pkg_config_dirs=pkg_config_dirs) => lcm))
+#
+provides(SimpleBuild,
+    (@build_steps begin
+        GetSources(lcm)
+        @build_steps begin
+            ChangeDirectory(joinpath(BinDeps.depsdir(lcm), "src", "lcm-1.3.0"))
+            `./configure --prefix=$(prefix) --with-java=no --with-python=no --with-lua=no`
+            MakeTargets(".", [])
+            MakeTargets(".", ["install"])
+        end
+    end), lcm)
 
-# provides(SimpleBuild,
-#     (@build_steps begin
-#         GetSources(lcm)
-#         @build_steps begin
-#             ChangeDirectory(joinpath(BinDeps.depsdir(lcm), "src", "lcm-1.3.0"))
-#             `./configure --prefix=$(prefix) --with-java=no` # disable java due to https://github.com/lcm-proj/lcm/issues/56
-#             MakeTargets(".", [])
-#             MakeTargets(".", ["install"])
-#         end
-#     end), lcm)
-
-# classpath = get(ENV, "CLASSPATH", "") * ":" * joinpath(prefix, "share", "java", "lcm.jar")
 pkg_config_path = join(pkg_config_dirs, ":")
 include_path = join(include_dirs, ":")
 env = Dict{ASCIIString, ASCIIString}("PKG_CONFIG_PATH"=>pkg_config_path, "INCLUDE_PATH"=>include_path)
