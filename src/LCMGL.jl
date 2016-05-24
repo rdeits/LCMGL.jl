@@ -14,11 +14,11 @@ export LCM, LCMGLClient,
 	vertex,
 	color,
 	normal,
-	scale,
+	scale_axes,
 	point_size,
 	line_width,
-	translated,
-	rotated,
+	translate,
+	rotate,
 	push_matrix,
 	pop_matrix,
 	load_identity,
@@ -115,17 +115,16 @@ color(gl::LCMGLClient, red, green, blue) = ccall((:bot_lcmgl_color3f, libbot2_lc
 color(gl::LCMGLClient, red, green, blue, alpha) = ccall((:bot_lcmgl_color4f, libbot2_lcmgl_client),
     Void, (Ptr{Void}, Cfloat, Cfloat, Cfloat, Cfloat), gl.pointer, red, green, blue, alpha)
 normal(gl::LCMGLClient, x, y, z) = ccall((:bot_lcmgl_normal3f, libbot2_lcmgl_client), Void, (Ptr{Void}, Cfloat, Cfloat, Cfloat), gl, x, y, z)
-scale(gl::LCMGLClient, x, y, z) = ccall((:bot_lcmgl_scalef, libbot2_lcmgl_client), Void, (Ptr{Void}, Cfloat, Cfloat, Cfloat), gl, x, y, z)
+scale_axes(gl::LCMGLClient, x, y, z) = ccall((:bot_lcmgl_scalef, libbot2_lcmgl_client), Void, (Ptr{Void}, Cfloat, Cfloat, Cfloat), gl, x, y, z)
 
 point_size(gl::LCMGLClient, size) = ccall((:bot_lcmgl_point_size, libbot2_lcmgl_client), Void, (Ptr{Void}, Cfloat), gl, size)
 line_width(gl::LCMGLClient, width) = ccall((:bot_lcmgl_line_width, libbot2_lcmgl_client), Void, (Ptr{Void}, Cfloat), gl, line_width)
 
 
-translated(gl::LCMGLClient, v0, v1, v2) = ccall((:bot_lcmgl_translated, libbot2_lcmgl_client), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble), gl, v0, v1, v2)
-rotated(gl::LCMGLClient, angle, x, y, z) = ccall((:bot_lcmgl_rotated, libbot2_lcmgl_client), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble, Cdouble), gl, gl, angle, x, y, z)
-push_matrix(gl::LCMGLClient) = ccall((:bot_lcmgl_push_matrix, libbot2_lcmgl_client), Void, (Ptr{Void},))
-pop_matrix(gl::LCMGLClient) = ccall((:bot_lcmgl_pop_matrix, libbot2_lcmgl_client), Void, (Ptr{Void},))
-load_identity(gl::LCMGLClient) = ccall((:bot_lcmgl_load_identity, libbot2_lcmgl_client), Void, (Ptr{Void},))
+translate(gl::LCMGLClient, v0, v1, v2) = ccall((:bot_lcmgl_translated, libbot2_lcmgl_client), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble), gl, v0, v1, v2)
+rotate(gl::LCMGLClient, angle, x, y, z) = ccall((:bot_lcmgl_rotated, libbot2_lcmgl_client), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble, Cdouble), gl, angle, x, y, z)
+push_matrix(gl::LCMGLClient) = ccall((:bot_lcmgl_push_matrix, libbot2_lcmgl_client), Void, (Ptr{Void},), gl)
+pop_matrix(gl::LCMGLClient) = ccall((:bot_lcmgl_pop_matrix, libbot2_lcmgl_client), Void, (Ptr{Void},), gl)
 
 sphere(gl::LCMGLClient, origin, radius, slices, stacks) = ccall((:bot_lcmgl_sphere, libbot2_lcmgl_client),
     Void, (Ptr{Void}, Ptr{Cdouble}, Cdouble, Cint, Cint), gl, origin, radius, slices, stacks)
