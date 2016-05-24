@@ -34,6 +34,18 @@ let
         vertex(lcmgl, 0, 1)
         vertex(lcmgl, 1, 0)
         end_mode(lcmgl)
+
+        point_size(lcmgl, 5)
+        begin_mode(lcmgl, LCMGL.POINTS)
+        vertex(lcmgl, 1, 1, 1)
+        end_mode(lcmgl)
+
+        line_width(lcmgl, 2)
+        begin_mode(lcmgl, LCMGL.LINES)
+        vertex(lcmgl, 0, 0, 0)
+        vertex(lcmgl, 1, 1, 1)
+        end_mode(lcmgl)
+        
         pop_matrix(lcmgl)
         switch_buffer(lcmgl)
     end

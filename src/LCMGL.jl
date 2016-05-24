@@ -118,7 +118,7 @@ normal(gl::LCMGLClient, x, y, z) = ccall((:bot_lcmgl_normal3f, libbot2_lcmgl_cli
 scale_axes(gl::LCMGLClient, x, y, z) = ccall((:bot_lcmgl_scalef, libbot2_lcmgl_client), Void, (Ptr{Void}, Cfloat, Cfloat, Cfloat), gl, x, y, z)
 
 point_size(gl::LCMGLClient, size) = ccall((:bot_lcmgl_point_size, libbot2_lcmgl_client), Void, (Ptr{Void}, Cfloat), gl, size)
-line_width(gl::LCMGLClient, width) = ccall((:bot_lcmgl_line_width, libbot2_lcmgl_client), Void, (Ptr{Void}, Cfloat), gl, line_width)
+line_width(gl::LCMGLClient, width) = ccall((:bot_lcmgl_line_width, libbot2_lcmgl_client), Void, (Ptr{Void}, Cfloat), gl, width)
 
 
 translate(gl::LCMGLClient, v0, v1, v2) = ccall((:bot_lcmgl_translated, libbot2_lcmgl_client), Void, (Ptr{Void}, Cdouble, Cdouble, Cdouble), gl, v0, v1, v2)
