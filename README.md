@@ -5,7 +5,7 @@
 
 This package provides Julia bindings for the [libbot lcmgl package](https://github.com/RobotLocomotion/libbot/tree/master/bot2-lcmgl), which allows OpenGL commands to be executed from a remote process using the [LCM](https://lcm-proj.github.io/) message passing system. It uses Julia's native C support to call directly into the `libbot2-lcmgl-client` library, so it should perform well with minimal overhead.
 
-To use LCMGL, you'll need a viewer capable of listening to and displaying the resulting drawing commands. The best LCMGL-capable viewer is the `drake-visualizer` app, which is part of the free [Drake](drake.mit.edu) robotics toolbox. 
+To use LCMGL, you'll need a viewer capable of listening to and displaying the resulting drawing commands. One excellent LCMGL-capable viewer is the `drake-visualizer` app, which is part of the free [Drake](drake.mit.edu) robotics toolbox. 
 
 # Usage
 
