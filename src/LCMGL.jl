@@ -55,6 +55,15 @@ function close(lcm::LCM)
 	end
 end
 
+function LCM(func::Function)
+    lc = LCM()
+    try
+        func(lc)
+    finally
+        close(lc)
+    end
+end
+
 immutable Clcmgl
     lcm::Ptr{Void}
     name::Ptr{Cchar}
@@ -82,6 +91,12 @@ type LCMGLClient
 end
 unsafe_convert(::Type{Ptr{Clcmgl}}, gl::LCMGLClient) = gl.pointer
 
+function datalen(lcmgl::LCMGLClient)
+    (lcmgl.pointer == C_NULL) && error("LCMGLClient is unininitialized")
+    cgl = unsafe_load(lcmgl.pointer)
+    cgl.datalen
+end
+
 function close(lcmgl::LCMGLClient)
 	if lcmgl.pointer != C_NULL
 		ccall((:bot_lcmgl_destroy, libbot2_lcmgl_client),
@@ -92,20 +107,19 @@ end
 
 LCMGLClient(name::AbstractString) = LCMGLClient(LCM(), name)
 
-LCMGLClient(func::Function, name::AbstractString) = begin
-    gl = LCMGLClient(name)
-    try
-        func(gl)
-    finally
-		close(gl.lcm)
-		close(gl)
+function LCMGLClient(func::Function, name::AbstractString, automatically_switch_buffer::Bool=true)
+    LCM() do lc
+        LCMGLClient(func, lc, name, automatically_switch_buffer)
     end
 end
 
-LCMGLClient(func::Function, lcm::LCM, name::AbstractString) = begin
+function LCMGLClient(func::Function, lcm::LCM, name::AbstractString, automatically_switch_buffer::Bool=true)
     gl = LCMGLClient(lcm, name)
     try
         func(gl)
+        if automatically_switch_buffer && datalen(gl) > 0
+            switch_buffer(gl)
+        end
     finally
 		close(gl)
     end

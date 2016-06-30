@@ -5,7 +5,7 @@
 
 This package provides Julia bindings for the [libbot lcmgl package](https://github.com/RobotLocomotion/libbot/tree/master/bot2-lcmgl), which allows OpenGL commands to be executed from a remote process using the [LCM](https://lcm-proj.github.io/) message passing system. It uses Julia's native C support to call directly into the `libbot2-lcmgl-client` library, so it should perform well with minimal overhead.
 
-To use LCMGL, you'll need a viewer capable of listening to and displaying the resulting drawing commands. One excellent LCMGL-capable viewer is the `drake-visualizer` app, which is part of the free [Drake](drake.mit.edu) robotics toolbox. 
+To use LCMGL, you'll need a viewer capable of listening to and displaying the resulting drawing commands. One excellent LCMGL-capable viewer is the `drake-visualizer` app, which is part of the free [Drake](drake.mit.edu) robotics toolbox.
 
 # Usage
 
@@ -13,6 +13,14 @@ Construct a named LCMGL Client with:
 
 ```julia
 lcmgl = LCMGLClient("client_name")
+```
+
+LCMGL functions are mapped to Julia functions:
+
+```julia
+color(lcmgl, rand(4)...)
+sphere(lcmgl, rand(3), 0.1, 20, 20)
+switch_buffer(lcmgl)
 ```
 
 Multiple `LCMGL` clients can also share the same `LCM` object:
@@ -29,9 +37,10 @@ A `do`-block syntax is also provided to make it easy to automatically construct 
 LCMGLClient("test") do lcmgl
     color(lcmgl, rand(4)...)
     sphere(lcmgl, rand(3), 0.1, 20, 20)
-    switch_buffer(lcmgl)
 end
 ```
+
+The `do`-block syntax will also automatically call `switch_buffer()` at the end of the block if there are any drawing commands waiting to be displayed.
 
 ## Memory Management
 

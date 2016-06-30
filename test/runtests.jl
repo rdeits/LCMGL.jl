@@ -8,7 +8,6 @@ for i = 1:1e4
 		vertex(lcmgl, rand(3)...)
 		vertex(lcmgl, rand(3)...)
 		end_mode(lcmgl)
-		switch_buffer(lcmgl)
     end
 end
 
