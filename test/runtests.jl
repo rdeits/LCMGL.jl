@@ -11,6 +11,14 @@ for i = 1:1e4
     end
 end
 
+for i = 1:1e3
+    LCMGLClient("test") do lcmgl
+        color(lcmgl, rand(4)...)
+        sphere(lcmgl, (rand(3)+1), 0.1, 20, 20)
+        switch_buffer(lcmgl)
+    end
+end
+
 lcmgl = LCMGLClient("test2")
 for i = 1:1e3
     color(lcmgl, rand(4)...)
