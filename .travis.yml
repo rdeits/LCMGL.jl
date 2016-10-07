@@ -5,16 +5,17 @@ os:
   - osx
 sudo: required
 julia:
-  - release
+  - 0.4
+  - 0.5
   - nightly
 notifications:
   email: false
 branches:
   only: master
 
-matrix:
-  allow_failures:
-    - julia: nightly
+# matrix:
+#   allow_failures:
+#     - julia: nightly
 
 after_success:
   - julia -e 'cd(Pkg.dir("LCMGL")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
