@@ -158,7 +158,7 @@ sphere(gl::LCMGLClient, origin, radius, slices, stacks) = ccall((:bot_lcmgl_sphe
 draw_axes(gl::LCMGLClient) = ccall((:bot_lcmgl_draw_axes, libbot2_lcmgl_client), Void, (Ptr{Clcmgl},), gl)
 
 function __init__()
-    @compat @static if is_linux()
+    @static if is_linux()
         Base.Libdl.dlopen(liblcm, Libdl.RTLD_GLOBAL)
     end
 end
