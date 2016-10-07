@@ -6,7 +6,7 @@ depsjl = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
 isfile(depsjl) ? include(depsjl) : error("LCMGL not properly ",
     "installed. Please run\nPkg.build(\"LCMGL\")")
 
-import Compat: @compat
+using Compat
 import Base: unsafe_convert
 export LCM, LCMGLClient,
 	switch_buffer,
