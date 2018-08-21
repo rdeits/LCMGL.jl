@@ -1,5 +1,3 @@
-__precompile__()
-
 module LCMGL
 
 depsjl = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
