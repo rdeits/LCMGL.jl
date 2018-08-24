@@ -38,7 +38,7 @@ QUAD_STRIP     = 0x0008
 POLYGON        = 0x0009
 
 
-type LCM
+mutable struct LCM
     pointer::Ptr{Void}
 
     LCM() = begin
@@ -65,7 +65,7 @@ function LCM(func::Function)
     end
 end
 
-immutable Clcmgl
+struct Clcmgl
     lcm::Ptr{Void}
     name::Ptr{Cchar}
     channel_name::Ptr{Cchar}
@@ -77,7 +77,7 @@ immutable Clcmgl
     texture_count::UInt32
 end
 
-type LCMGLClient
+mutable struct LCMGLClient
     lcm::LCM
 	name::AbstractString
     pointer::Ptr{Clcmgl}
