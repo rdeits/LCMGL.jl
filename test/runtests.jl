@@ -1,5 +1,5 @@
 using LCMGL
-using Base.Test
+using Test
 
 for i = 1:1e4
     LCMGLClient("test") do lcmgl
@@ -14,7 +14,7 @@ end
 for i = 1:1e3
     LCMGLClient("test") do lcmgl
         color(lcmgl, rand(4)...)
-        sphere(lcmgl, (rand(3)+1), 0.1, 20, 20)
+        sphere(lcmgl, (rand(3) .+ 1), 0.1, 20, 20)
         switch_buffer(lcmgl)
     end
 end

@@ -2,16 +2,11 @@ using BinDeps
 
 @BinDeps.setup
 
-deps = [
-    glib = library_dependency("glib", aliases = ["libglib-2.0-0", "libglib-2.0", "libglib-2.0.so.0"])
-    lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[glib])
-    lcmgl_client = library_dependency("bot2-lcmgl-client", aliases=["libbot2-lcmgl-client", "libbot2-lcmgl-client.1"], depends=[lcm])
-]
+glib = library_dependency("glib", aliases = ["libglib-2.0-0", "libglib-2.0", "libglib-2.0.so.0"])
+lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[glib])
+lcmgl_client = library_dependency("bot2-lcmgl-client", aliases=["libbot2-lcmgl-client", "libbot2-lcmgl-client.1"], depends=[lcm])
 
-@osx_only begin
-    if Pkg.installed("Homebrew") === nothing
-        error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
-    end
+if Sys.isapple()
     using Homebrew
     provides(Homebrew.HB, "glib", glib, os=:Darwin)
     ENV["PKG_CONFIG_PATH"] = get(ENV, "PKG_CONFIG_PATH", "") * ":" * joinpath(Homebrew.prefix(), "lib", "pkgconfig")
@@ -48,7 +43,7 @@ provides(SimpleBuild,
         GetSources(lcmgl_client)
         @build_steps begin
             MakeTargets(joinpath(BinDeps.depsdir(lcmgl_client), "src", libbot_dirname), ["BUILD_PREFIX=$(prefix)"])
-            @osx_only begin
+            @static if Sys.isapple()
                 `install_name_tool -change $(joinpath(prefix, "lib", "liblcm.1.dylib")) "@loader_path/liblcm.1.dylib" $(joinpath(prefix, "lib", "libbot2-lcmgl-client.1.dylib"))`
             end
         end
