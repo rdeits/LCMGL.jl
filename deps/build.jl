@@ -7,9 +7,6 @@ lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[glib])
 lcmgl_client = library_dependency("bot2-lcmgl-client", aliases=["libbot2-lcmgl-client", "libbot2-lcmgl-client.1"], depends=[lcm])
 
 if Sys.isapple()
-    if Pkg.installed("Homebrew") === nothing
-        error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
-    end
     using Homebrew
     provides(Homebrew.HB, "glib", glib, os=:Darwin)
     ENV["PKG_CONFIG_PATH"] = get(ENV, "PKG_CONFIG_PATH", "") * ":" * joinpath(Homebrew.prefix(), "lib", "pkgconfig")
